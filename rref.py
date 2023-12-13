@@ -14,10 +14,8 @@ for line in f:
         row.append(l)
     matrix.append(row)
 #Input matrix achieved : print(matrix)
-import math
 
 #Finding RREF Steps
-
 rows=len(matrix) #number of rows in matrix
 for i in matrix:
     a=len(i)
@@ -42,7 +40,7 @@ def PivotOne(): #WORKS find the smallest non zero first entry and swap
     int=0
     for i in matrix:
         ele=matrix[0][0]
-        if (i[0]>0) and (i[0]<ele):
+        if (i[0]!=0) and (i[0]<ele or ele==0):
             swap(0,int)
         int+=1
 
@@ -73,11 +71,11 @@ def finalCol(piv,pivrow,pivcol):
 # first entry 1 , first entry 0, first entry non zero non 1
 # which can be simplified : we just need to find the smallest non zero first entry and swap
 PivotOne() 
-
 # now if pivot entry isn't 1, divide it and the entrie row by itself
 div=matrix[0][0]
-for i in range(coloumns):
-    matrix[0][i]=(matrix[0][i]/div)
+if(div!=0):
+    for i in range(coloumns):
+        matrix[0][i]=(matrix[0][i]/div)
 #we now have a matrix with the pivot entry as one
 
 # apply the finalCol on each row
@@ -92,7 +90,25 @@ for i in range (rows):
             matrix[i][j]=(matrix[i][j]/div)
         finalCol(matrix[i][piv],i,piv)
 
+#swap rows in decreasing pivot position order
+for i in range (rows):
+    for j in range(i,rows):
+        r=i
+        if findPivCol(r)>findPivCol(j) and findPivCol(r)!=coloumns+1 and findPivCol(j)!=coloumns+1:
+            swap(r,j)
+
+#pivot matrix for printing
+pivpos=[]
+for i in range (rows):
+    a=findPivCol(i)
+    if (a==(coloumns+1)):
+        a="Null"
+    pivpos.append((i,a))
+
+print("Pivot Positions:")
+print(pivpos)
+
 print("The Row Reduced Echelon Matrix is :")
 for i in range (rows):
-        print(' '.join(map(str, matrix[i])))
+        print('  '.join(map(str, matrix[i])))
     
